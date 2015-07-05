@@ -11,6 +11,6 @@ http.createServer(function (req, res) {
         }
 
         res.writeHead(200, {'Content-Type': 'image/png'});
-        res.end(buffile.toString('utf8'));
+        res.end(file.toString('utf8'));
     });
 }).listen(process.env.PORT || 5000);
