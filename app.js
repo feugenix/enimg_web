@@ -1,8 +1,12 @@
 var http = require('http'),
     fs = require('fs');
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 http.createServer(function (req, res) {
-    var num = Math.floor(Math.random() * 10);
+    var num = getRandomInt(0, 9);
 
     fs.readFile(__dirname + '/img/test' + num + '.png', function(err, file) {
         if (err) {
@@ -12,6 +16,6 @@ http.createServer(function (req, res) {
         }
 
         res.writeHead(200, {'Content-Type': 'image/png'});
-        res.end(file.toString('utf8'));
+        res.end(file, 'binary');
     });
 }).listen(process.env.PORT || 5000);
