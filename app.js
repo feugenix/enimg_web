@@ -8,6 +8,7 @@ http.createServer(function (req, res) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'text/plain'});
             res.end(err);
+            return;
         }
 
         res.writeHead(200, {'Content-Type': 'image/png'});
