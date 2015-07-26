@@ -6,7 +6,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// https://hidden-harbor-4152.herokuapp.com/fd432f4e1.png
+// https://level12.herokuapp.com/fd432f4e1.png
 http.createServer(function (req, res) {
     if (req.url.indexOf(checkHash + '.png') === -1) {
 
