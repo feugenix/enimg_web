@@ -11,7 +11,7 @@ http.createServer(function (req, res) {
     if (req.url.indexOf(checkHash + '.png') === -1) {
 
         res.statusCode = 302;
-        res.setheader('Location', listOfBullshit[bullshitKeys[getRandomInt(0, bullshitKeys.length)]]);
+        res.setHeader('Location', listOfBullshit[bullshitKeys[getRandomInt(0, bullshitKeys.length)]]);
         res.end('');
 
         return;
