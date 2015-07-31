@@ -30,13 +30,13 @@ http.createServer(function (req, res) {
     }
 
     var cookies = parseCookies(req),
-        prev = parseInt(cookies.prev),
+        prev = cookies.csrft,
         num = getRandomInt(0, 9);
 
-    console.log(num, prev);
-    while (num === prev)
+    console.log(prevTokens[num], prev);
+    while (prevTokens[num] === prev)
         num = getRandomInt(0, 9);
-    console.log(num, prev);
+    console.log(prevTokens[num], prev)
 
     fs.readFile(__dirname + '/img/test' + num + '.png', function(err, file) {
         if (err) {
@@ -50,11 +50,26 @@ http.createServer(function (req, res) {
 
         res.writeHead(200, {
             'Content-Type': 'image/png',
-            'Set-Cookie': 'prev=' + num,
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'nocache',
+            'Expires': '0',
+            'Set-Cookie': 'csrft=' + prevTokens[num],
         });
         res.end(file, 'binary');
     });
 }).listen(process.env.PORT || 5000);
+
+var prevTokens = {
+    0: 'e611677057a13125f1cc272057d64b65',
+    1: '7b1c38c9731d7354fb6072af6c5a6650',
+    2: '5cbffa850922241d208c1758b1a156dc',
+    3: '4b4b613b69e61bc1be3f82e7388937f5',
+    4: '7fd380dced73721d820a9948b1a06108',
+    5: 'f50f6c32ae08641129ac1700119304bc',
+    6: '7a13d8a47c976a2a04b9f7e692b1e048',
+    7: '3cf2b144cffb4f654f09eeea60c9668f',
+    8: 'c9f8ee36c17399be6179b562e9e0af22'
+};
 
 var listOfBullshit = {
         'salad fingers spoons': 'https://www.youtube.com/watch?v=OWBFKL6H7rI',
