@@ -6,6 +6,18 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function parseCookies(request) {
+    var list = {},
+        rc = request.headers.cookie;
+
+    rc && rc.split(';').forEach(function(cookie) {
+        var parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+
+    return list;
+}
+
 // https://level12.herokuapp.com/fd432f4e1.png
 http.createServer(function (req, res) {
     if (req.url.indexOf(checkHash + '.png') === -1) {
@@ -17,17 +29,29 @@ http.createServer(function (req, res) {
         return;
     }
 
-    var num = getRandomInt(0, 9);
+    var cookies = parseCookies(req),
+        prev = parseInt(cookies.prev),
+        num = getRandomInt(0, 9);
+
+    console.log(num, prev);
+    while (num === prev)
+        num = getRandomInt(0, 9);
+    console.log(num, prev);
 
     fs.readFile(__dirname + '/img/test' + num + '.png', function(err, file) {
         if (err) {
-            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            res.writeHead(500, {
+                'Content-Type': 'text/plain'
+            });
             res.send('Херня какая-то, звоните оргам');
             res.end(err);
             return;
         }
 
-        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.writeHead(200, {
+            'Content-Type': 'image/png',
+            'Set-Cookie': 'prev=' + num,
+        });
         res.end(file, 'binary');
     });
 }).listen(process.env.PORT || 5000);
